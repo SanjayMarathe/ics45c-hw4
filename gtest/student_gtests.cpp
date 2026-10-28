@@ -63,7 +63,23 @@ TEST(StringFunction, strncpy) {
 }
 
 TEST(StringFunction, strcat) {
-    EXPECT_TRUE(false);
+    char result[20];
+
+    String::strcpy(result, "foo");
+    EXPECT_EQ(String::strcat(result, "bar"), result);
+    EXPECT_STREQ(result, "foobar");
+
+    String::strcpy(result, "foo");
+    String::strcat(result, "");
+    EXPECT_STREQ(result, "foo");
+
+    String::strcpy(result, "");
+    String::strcat(result, "bar");
+    EXPECT_STREQ(result, "bar");
+
+    String::strcpy(result, "");
+    String::strcat(result, "");
+    EXPECT_STREQ(result, "");
 }
 
 TEST(StringFunction, strncat) {
