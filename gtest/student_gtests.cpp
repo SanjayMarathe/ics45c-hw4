@@ -36,7 +36,30 @@ TEST(StringFunction, strdup) {
 }
 
 TEST(StringFunction, strncpy) {
-    EXPECT_TRUE(false);
+    char result[10];
+
+    EXPECT_EQ(String::strncpy(result, "hello", 10), result);
+    EXPECT_STREQ(result, "hello");
+
+    EXPECT_EQ(String::strncpy(result, "abc", 4), result);
+    EXPECT_STREQ(result, "abc");
+
+    String::strcpy(result, "xxxxxxx");
+    EXPECT_EQ(String::strncpy(result, "hello", 3), result);
+    EXPECT_EQ(result[0], 'h');
+    EXPECT_EQ(result[1], 'e');
+    EXPECT_EQ(result[2], 'l');
+
+    String::strcpy(result, "xxxxxxx");
+    String::strncpy(result, "hello", 1);
+    EXPECT_EQ(result[0], 'h');
+
+    String::strcpy(result, "xxxxxxx");
+    EXPECT_EQ(String::strncpy(result, "hello", 0), result);
+    EXPECT_EQ(result[0], 'x');
+
+    EXPECT_EQ(String::strncpy(result, "", 5), result);
+    EXPECT_STREQ(result, "");
 }
 
 TEST(StringFunction, strcat) {
