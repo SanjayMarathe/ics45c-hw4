@@ -24,7 +24,15 @@ TEST(StringFunction, strcpy) {
 }
 
 TEST(StringFunction, strdup) {
-    EXPECT_TRUE(false);
+    const char *original = "hello";
+    char *copy = String::strdup(original);
+    EXPECT_STREQ(copy, "hello");
+    EXPECT_NE(copy, original);
+    delete[] copy;
+
+    char *empty = String::strdup("");
+    EXPECT_STREQ(empty, "");
+    delete[] empty;
 }
 
 TEST(StringFunction, strncpy) {
