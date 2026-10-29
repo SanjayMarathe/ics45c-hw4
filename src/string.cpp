@@ -1,5 +1,8 @@
 # include "string.hpp"
 
+# include <ostream>
+# include <utility>
+
 int String::strlen(const char *s) {
     int len = 0;
     while(s[len] != '\0') {
@@ -156,5 +159,47 @@ const char *String::strstr(const char *haystack, const char *needle) {
     }
 
     return nullptr;
+}
+
+String::String(const char *s) : buf(strdup(s)) {}
+
+String::String(const String &s) : buf(strdup(s.buf)) {}
+
+String::String(int length) : buf(new char[length + 1]) {
+    buf[length] = '\0';
+}
+
+String::~String() {
+    delete[] buf;
+}
+
+void String::swap(String &s) {
+    std::swap(buf, s.buf);
+}
+
+String &String::operator=(String s) {
+    swap(s);
+    return *this;
+}
+
+char &String::operator[](int index) {
+    return buf[index];
+}
+
+const char &String::operator[](int index) const {
+    return buf[index];
+}
+
+int String::size() const {
+    return strlen(buf);
+}
+
+void String::print(std::ostream &out) const {
+    out << buf;
+}
+
+std::ostream &operator<<(std::ostream &out, String s) {
+    s.print(out);
+    return out;
 }
 
