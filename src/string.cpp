@@ -199,7 +199,7 @@ void String::print(std::ostream &out) const {
     out << buf;
 }
 
-std::ostream &operator<<(std::ostream &out, String s) {
+std::ostream &operator<<(std::ostream &out, const String &s) {
     s.print(out);
     return out;
 }
@@ -223,7 +223,7 @@ int String::indexOf(char c) const {
     return static_cast<int>(found - buf);
 }
 
-int String::indexOf(String s) const {
+int String::indexOf(const String &s) const {
     const char *found = strstr(buf, s.buf);
     if (found == nullptr) {
         return -1;
@@ -232,38 +232,38 @@ int String::indexOf(String s) const {
     return static_cast<int>(found - buf);
 }
 
-bool String::operator==(String s) const {
+bool String::operator==(const String &s) const {
     return strcmp(buf, s.buf) == 0;
 }
 
-bool String::operator!=(String s) const {
+bool String::operator!=(const String &s) const {
     return strcmp(buf, s.buf) != 0;
 }
 
-bool String::operator<(String s) const {
+bool String::operator<(const String &s) const {
     return strcmp(buf, s.buf) < 0;
 }
 
-bool String::operator>(String s) const {
+bool String::operator>(const String &s) const {
     return strcmp(buf, s.buf) > 0;
 }
 
-bool String::operator<=(String s) const {
+bool String::operator<=(const String &s) const {
     return strcmp(buf, s.buf) <= 0;
 }
 
-bool String::operator>=(String s) const {
+bool String::operator>=(const String &s) const {
     return strcmp(buf, s.buf) >= 0;
 }
 
-String String::operator+(String s) const {
+String String::operator+(const String &s) const {
     String result(size() + s.size());
     strcpy(result.buf, buf);
     strcat(result.buf, s.buf);
     return result;
 }
 
-String &String::operator+=(String s) {
+String &String::operator+=(const String &s) {
     *this = *this + s;
     return *this;
 }
