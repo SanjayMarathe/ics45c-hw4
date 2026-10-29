@@ -1,5 +1,6 @@
 # include "string.hpp"
 
+# include <istream>
 # include <ostream>
 # include <utility>
 
@@ -201,5 +202,81 @@ void String::print(std::ostream &out) const {
 std::ostream &operator<<(std::ostream &out, String s) {
     s.print(out);
     return out;
+}
+
+String String::reverse() const {
+    String result(size());
+    reverse_cpy(result.buf, buf);
+    return result;
+}
+
+int String::indexOf(char c) const {
+    if (c == '\0') {
+        return -1;
+    }
+
+    const char *found = strchr(buf, c);
+    if (found == nullptr) {
+        return -1;
+    }
+
+    return static_cast<int>(found - buf);
+}
+
+int String::indexOf(String s) const {
+    const char *found = strstr(buf, s.buf);
+    if (found == nullptr) {
+        return -1;
+    }
+
+    return static_cast<int>(found - buf);
+}
+
+bool String::operator==(String s) const {
+    return strcmp(buf, s.buf) == 0;
+}
+
+bool String::operator!=(String s) const {
+    return strcmp(buf, s.buf) != 0;
+}
+
+bool String::operator<(String s) const {
+    return strcmp(buf, s.buf) < 0;
+}
+
+bool String::operator>(String s) const {
+    return strcmp(buf, s.buf) > 0;
+}
+
+bool String::operator<=(String s) const {
+    return strcmp(buf, s.buf) <= 0;
+}
+
+bool String::operator>=(String s) const {
+    return strcmp(buf, s.buf) >= 0;
+}
+
+String String::operator+(String s) const {
+    String result(size() + s.size());
+    strcpy(result.buf, buf);
+    strcat(result.buf, s.buf);
+    return result;
+}
+
+String &String::operator+=(String s) {
+    *this = *this + s;
+    return *this;
+}
+
+void String::read(std::istream &in) {
+    char temp[1024];
+    if (in >> temp) {
+        *this = String(temp);
+    }
+}
+
+std::istream &operator>>(std::istream &in, String &s) {
+    s.read(in);
+    return in;
 }
 
