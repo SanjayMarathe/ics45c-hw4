@@ -35,13 +35,15 @@ char *String::strncpy(char *dest, const char *src, int n) {
         i++;
     }
 
-    while (i<n) {
+    while (i < n) {
         dest[i] = '\0';
         i++;
     }
+
+    return dest;
 }
 
-char *String::strcat()(char *dest, const char *src) {
+char *String::strcat(char *dest, const char *src) {
     int i = 0;
     int j = 0;
 
@@ -61,7 +63,7 @@ char *String::strcat()(char *dest, const char *src) {
     return dest;
 }
 
-char *String::strncat()(char *dest, const char *src, int n) {
+char *String::strncat(char *dest, const char *src, int n) {
     int i = 0;
     int j = 0;
 
@@ -79,5 +81,80 @@ char *String::strncat()(char *dest, const char *src, int n) {
 
     dest[i] = '\0';
     return dest;
+}
+
+int String::strcmp(const char *left, const char *right) {
+    int i = 0;
+
+    while (left[i] != '\0' && left[i] == right[i]) {
+        i++;
+    }
+
+    return left[i] - right[i];
+}
+
+int String::strncmp(const char *left, const char *right, int n) {
+    int i = 0;
+
+    while (i < n && left[i] != '\0' && left[i] == right[i]) {
+        i++;
+    }
+
+    if (i == n) {
+        return 0;
+    }
+
+    return left[i] - right[i];
+}
+
+void String::reverse_cpy(char *dest, const char *src) {
+    int len = 0;
+
+    while (src[len] != '\0') {
+        len++;
+    }
+
+    for (int i = 0; i < len; i++) {
+        dest[i] = src[len - 1 - i];
+    }
+
+    dest[len] = '\0';
+}
+
+const char *String::strchr(const char *str, char c) {
+    int i = 0;
+
+    while (str[i] != '\0') {
+        if (str[i] == c) {
+            return str + i;
+        }
+        i++;
+    }
+
+    if (c == '\0') {
+        return str + i;
+    }
+
+    return nullptr;
+}
+
+const char *String::strstr(const char *haystack, const char *needle) {
+    if (needle[0] == '\0') {
+        return haystack;
+    }
+
+    for (int i = 0; haystack[i] != '\0'; i++) {
+        int j = 0;
+
+        while (needle[j] != '\0' && haystack[i + j] == needle[j]) {
+            j++;
+        }
+
+        if (needle[j] == '\0') {
+            return haystack + i;
+        }
+    }
+
+    return nullptr;
 }
 
