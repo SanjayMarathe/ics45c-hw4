@@ -60,6 +60,12 @@ TEST(StringFunction, strncpy) {
 
     EXPECT_EQ(String::strncpy(result, "", 5), result);
     EXPECT_STREQ(result, "");
+
+    String::strcpy(result, "xxxxxxx");
+    EXPECT_EQ(String::strncpy(result, "hi", 2), result);
+    EXPECT_EQ(result[0], 'h');
+    EXPECT_EQ(result[1], 'i');
+    EXPECT_EQ(result[2], 'x');
 }
 
 TEST(StringFunction, strcat) {
@@ -111,21 +117,80 @@ TEST(StringFunction, strncat) {
 }
 
 TEST(StringFunction, strcmp) {
-    EXPECT_TRUE(false);
+    EXPECT_EQ(String::strcmp("abc", "abc"), 0);
+    EXPECT_EQ(String::strcmp("", ""), 0);
+    EXPECT_LT(String::strcmp("abc", "abd"), 0);
+    EXPECT_GT(String::strcmp("abd", "abc"), 0);
+    EXPECT_LT(String::strcmp("ab", "abc"), 0);
+    EXPECT_GT(String::strcmp("abc", "ab"), 0);
+    EXPECT_LT(String::strcmp("", "a"), 0);
+    EXPECT_GT(String::strcmp("a", ""), 0);
+    EXPECT_LT(String::strcmp("abc", "abcd"), 0);
+    EXPECT_GT(String::strcmp("b", "a"), 0);
 }
 
 TEST(StringFunction, strncmp) {
-    EXPECT_TRUE(false);
+    EXPECT_EQ(String::strncmp("abc", "abd", 2), 0);
+    EXPECT_LT(String::strncmp("abc", "abd", 3), 0);
+    EXPECT_EQ(String::strncmp("abc", "xyz", 0), 0);
+    EXPECT_EQ(String::strncmp("hello", "hello", 10), 0);
+    EXPECT_EQ(String::strncmp("", "", 5), 0);
+    EXPECT_LT(String::strncmp("", "a", 1), 0);
+    EXPECT_EQ(String::strncmp("ab", "a", 1), 0);
+    EXPECT_GT(String::strncmp("ab", "a", 2), 0);
+    EXPECT_GT(String::strncmp("help", "hello", 4), 0);
+    EXPECT_EQ(String::strncmp("hello", "help", 3), 0);
 }
 
 TEST(StringFunction, reverse_cpy) {
-    EXPECT_TRUE(false);
+    char result[10];
+
+    String::reverse_cpy(result, "hello");
+    EXPECT_STREQ(result, "olleh");
+
+    String::reverse_cpy(result, "");
+    EXPECT_STREQ(result, "");
+
+    String::reverse_cpy(result, "a");
+    EXPECT_STREQ(result, "a");
+
+    String::reverse_cpy(result, "ab");
+    EXPECT_STREQ(result, "ba");
+
+    String::reverse_cpy(result, "racecar");
+    EXPECT_STREQ(result, "racecar");
 }
 
 TEST(StringFunction, strchr) {
-    EXPECT_TRUE(false);
+    const char *s = "hello";
+    EXPECT_EQ(String::strchr(s, 'h'), s);
+    EXPECT_EQ(String::strchr(s, 'e'), s + 1);
+    EXPECT_EQ(String::strchr(s, 'o'), s + 4);
+    EXPECT_EQ(String::strchr(s, 'x'), nullptr);
+    EXPECT_EQ(String::strchr(s, '\0'), s + 5);
+
+    EXPECT_EQ(String::strchr("", 'a'), nullptr);
+    EXPECT_STREQ(String::strchr("", '\0'), "");
+
+    const char *t = "banana";
+    EXPECT_EQ(String::strchr(t, 'a'), t + 1);
+    EXPECT_EQ(String::strchr(t, 'b'), t);
 }
 
 TEST(StringFunction, strstr) {
-    EXPECT_TRUE(false);
+    const char *h = "hello world";
+    EXPECT_EQ(String::strstr(h, "hello"), h);
+    EXPECT_EQ(String::strstr(h, "world"), h + 6);
+    EXPECT_EQ(String::strstr(h, "lo w"), h + 3);
+    EXPECT_EQ(String::strstr(h, "o"), h + 4);
+    EXPECT_EQ(String::strstr(h, ""), h);
+    EXPECT_EQ(String::strstr(h, "xyz"), nullptr);
+    EXPECT_EQ(String::strstr(h, "hello world!"), nullptr);
+
+    EXPECT_STREQ(String::strstr("", ""), "");
+    EXPECT_EQ(String::strstr("", "a"), nullptr);
+
+    const char *overlap = "aaa";
+    EXPECT_EQ(String::strstr(overlap, "aa"), overlap);
+    EXPECT_EQ(String::strstr("abc", "abcd"), nullptr);
 }
