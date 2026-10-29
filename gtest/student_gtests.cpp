@@ -49,24 +49,28 @@ TEST(StringFunction, strncpy) {
     EXPECT_EQ(result[0], 'h');
     EXPECT_EQ(result[1], 'e');
     EXPECT_EQ(result[2], 'l');
-    EXPECT_EQ(result[3], 'x');
+    EXPECT_EQ(result[3], '\0');
 
     String::strcpy(result, "xxxxxxx");
     String::strncpy(result, "hello", 1);
     EXPECT_EQ(result[0], 'h');
+    EXPECT_EQ(result[1], '\0');
 
     String::strcpy(result, "xxxxxxx");
     EXPECT_EQ(String::strncpy(result, "hello", 0), result);
-    EXPECT_EQ(result[0], 'x');
+    EXPECT_STREQ(result, "");
 
     EXPECT_EQ(String::strncpy(result, "", 5), result);
+    EXPECT_STREQ(result, "");
+
+    EXPECT_EQ(String::strncpy(result, "", 0), result);
     EXPECT_STREQ(result, "");
 
     String::strcpy(result, "xxxxxxx");
     EXPECT_EQ(String::strncpy(result, "hi", 2), result);
     EXPECT_EQ(result[0], 'h');
     EXPECT_EQ(result[1], 'i');
-    EXPECT_EQ(result[2], 'x');
+    EXPECT_EQ(result[2], '\0');
 
     char padded[8];
     for (int i = 0; i < 8; ++i) {
@@ -76,10 +80,15 @@ TEST(StringFunction, strncpy) {
     EXPECT_EQ(padded[0], 'h');
     EXPECT_EQ(padded[1], 'i');
     EXPECT_EQ(padded[2], '\0');
-    EXPECT_EQ(padded[3], '\0');
-    EXPECT_EQ(padded[4], '\0');
-    EXPECT_EQ(padded[5], '\0');
+    EXPECT_EQ(padded[3], 'z');
     EXPECT_EQ(padded[6], 'z');
+
+    char exact[6];
+    EXPECT_EQ(String::strncpy(exact, "hello", 5), exact);
+    EXPECT_STREQ(exact, "hello");
+
+    EXPECT_EQ(String::strncpy(result, "a! b?", 4), result);
+    EXPECT_STREQ(result, "a! b");
 }
 
 TEST(StringFunction, strcat) {

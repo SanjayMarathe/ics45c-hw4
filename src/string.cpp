@@ -1,5 +1,6 @@
 #include "string.hpp"
 
+#include <iostream>
 #include <istream>
 #include <ostream>
 #include <utility>
@@ -39,11 +40,7 @@ char *String::strncpy(char *dest, const char *src, int n) {
         i++;
     }
 
-    while (i < n) {
-        dest[i] = '\0';
-        i++;
-    }
-
+    dest[i] = '\0';
     return dest;
 }
 
@@ -200,10 +197,18 @@ String &String::operator=(String &&s) {
 }
 
 char &String::operator[](int index) {
+    if (!in_bounds(index)) {
+        std::cerr << "ERROR: Index Out Of Bounds" << std::endl;
+        return buf[0];
+    }
     return buf[index];
 }
 
 const char &String::operator[](int index) const {
+    if (!in_bounds(index)) {
+        std::cerr << "ERROR: Index Out Of Bounds" << std::endl;
+        return buf[0];
+    }
     return buf[index];
 }
 

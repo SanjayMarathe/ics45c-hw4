@@ -82,14 +82,8 @@ public:
     static const char *strstr(const char *haystack, const char *needle);
 
 private:
-    char *buf;  // array for the characters in this String
-                // DO NOT add any data members - use the null terminator
+    char *buf;
 
-    // construct string with a buffer of given length
-    // Note: private constructors are used when you want to construct
-    // an instance of a class that doesn't satisfy the invariants of the class
-    // (for example without null-terminator).
-    // Useful for implementing reverse() and operator +()
     explicit String(int length);
 };
 
