@@ -121,4 +121,20 @@ TEST(StringClass, Read) {
     String u("keep");
     u.read(empty_in);
     EXPECT_EQ(u, String("keep"));
+
+    char long_word[2001];
+    for (int i = 0; i < 2000; ++i) {
+        long_word[i] = 'q';
+    }
+    long_word[2000] = '\0';
+    stringstream long_in;
+    long_in << long_word << " next";
+    String w("old");
+    w.read(long_in);
+    EXPECT_EQ(w.size(), 2000);
+    EXPECT_EQ(w[0], 'q');
+    EXPECT_EQ(w[1999], 'q');
+    String rest;
+    long_in >> rest;
+    EXPECT_EQ(rest, String("next"));
 }

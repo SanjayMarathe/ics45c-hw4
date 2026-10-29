@@ -49,6 +49,7 @@ TEST(StringFunction, strncpy) {
     EXPECT_EQ(result[0], 'h');
     EXPECT_EQ(result[1], 'e');
     EXPECT_EQ(result[2], 'l');
+    EXPECT_EQ(result[3], 'x');
 
     String::strcpy(result, "xxxxxxx");
     String::strncpy(result, "hello", 1);
@@ -66,6 +67,19 @@ TEST(StringFunction, strncpy) {
     EXPECT_EQ(result[0], 'h');
     EXPECT_EQ(result[1], 'i');
     EXPECT_EQ(result[2], 'x');
+
+    char padded[8];
+    for (int i = 0; i < 8; ++i) {
+        padded[i] = 'z';
+    }
+    EXPECT_EQ(String::strncpy(padded, "hi", 6), padded);
+    EXPECT_EQ(padded[0], 'h');
+    EXPECT_EQ(padded[1], 'i');
+    EXPECT_EQ(padded[2], '\0');
+    EXPECT_EQ(padded[3], '\0');
+    EXPECT_EQ(padded[4], '\0');
+    EXPECT_EQ(padded[5], '\0');
+    EXPECT_EQ(padded[6], 'z');
 }
 
 TEST(StringFunction, strcat) {
@@ -193,4 +207,10 @@ TEST(StringFunction, strstr) {
     const char *overlap = "aaa";
     EXPECT_EQ(String::strstr(overlap, "aa"), overlap);
     EXPECT_EQ(String::strstr("abc", "abcd"), nullptr);
+
+    const char *partial = "ababc";
+    EXPECT_EQ(String::strstr(partial, "abc"), partial + 2);
+
+    const char *mississippi = "mississippi";
+    EXPECT_EQ(String::strstr(mississippi, "issip"), mississippi + 4);
 }

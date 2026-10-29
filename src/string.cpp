@@ -1,8 +1,8 @@
-# include "string.hpp"
+#include "string.hpp"
 
-# include <istream>
-# include <ostream>
-# include <utility>
+#include <istream>
+#include <ostream>
+#include <utility>
 
 int String::strlen(const char *s) {
     int len = 0;
@@ -285,10 +285,46 @@ String &String::operator+=(const String &s) {
 }
 
 void String::read(std::istream &in) {
-    char temp[1024];
-    if (in >> temp) {
-        *this = String(temp);
+    in >> std::ws;
+    if (!in) {
+        return;
     }
+
+    int capacity = 16;
+    char *temp = new char[capacity];
+    int len = 0;
+    char c;
+
+    while (in.get(c)) {
+        if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f') {
+            in.putback(c);
+            break;
+        }
+
+        if (len + 1 >= capacity) {
+            int grown = capacity * 2;
+            char *next = new char[grown];
+            for (int i = 0; i < len; ++i) {
+                next[i] = temp[i];
+            }
+            delete[] temp;
+            temp = next;
+            capacity = grown;
+        }
+
+        temp[len] = c;
+        ++len;
+    }
+
+    if (len == 0) {
+        in.setstate(std::ios_base::failbit);
+        delete[] temp;
+        return;
+    }
+
+    temp[len] = '\0';
+    *this = String(temp);
+    delete[] temp;
 }
 
 std::istream &operator>>(std::istream &in, String &s) {
