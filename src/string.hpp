@@ -12,15 +12,15 @@ public:
     String(const String &s);
 
     // construct this string by moving from string s
-    // String(String &&s);
+    String(String &&s);
     // swap buf between this string and s using std::swap, explained later
     void swap(String &s);
 
     // assignment operator from one string, s, to this string
-    String &operator=(String s);
+    String &operator=(const String &s);
 
     // assign to this string by moving from string s
-    // String &operator=(String &&s);
+    String &operator=(String &&s);
     // allow indexing this string with notation s[i]
     char &operator[](int index);
 

@@ -166,6 +166,10 @@ String::String(const char *s) : buf(strdup(s)) {}
 
 String::String(const String &s) : buf(strdup(s.buf)) {}
 
+String::String(String &&s) : buf(s.buf) {
+    s.buf = nullptr;
+}
+
 String::String(int length) : buf(new char[length + 1]) {
     buf[length] = '\0';
 }
@@ -178,8 +182,20 @@ void String::swap(String &s) {
     std::swap(buf, s.buf);
 }
 
-String &String::operator=(String s) {
-    swap(s);
+String &String::operator=(const String &s) {
+    if (this != &s) {
+        String copy(s);
+        swap(copy);
+    }
+    return *this;
+}
+
+String &String::operator=(String &&s) {
+    if (this != &s) {
+        delete[] buf;
+        buf = s.buf;
+        s.buf = nullptr;
+    }
     return *this;
 }
 
